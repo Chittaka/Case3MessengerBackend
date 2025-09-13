@@ -1,0 +1,6 @@
+@Case3MessengerBackend_HostAddress = http://localhost:5089
+
+GET {{Case3MessengerBackend_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

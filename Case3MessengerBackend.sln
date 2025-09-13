@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35806.99 d17.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Case3MessengerBackend", "Case3MessengerBackend\Case3MessengerBackend.csproj", "{A8C13816-DD68-4B23-9D38-A1E2B1AA567D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A8C13816-DD68-4B23-9D38-A1E2B1AA567D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A8C13816-DD68-4B23-9D38-A1E2B1AA567D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A8C13816-DD68-4B23-9D38-A1E2B1AA567D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A8C13816-DD68-4B23-9D38-A1E2B1AA567D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1EAA2877-AA1B-4E0E-AC64-620BD889F99A}
+	EndGlobalSection
+EndGlobal
