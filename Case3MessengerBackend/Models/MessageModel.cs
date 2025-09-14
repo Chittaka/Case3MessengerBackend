@@ -1,5 +1,5 @@
 ﻿using System;
-namespace Case2
+namespace Case3MessengerBackend
 {
     public class Message
     {
