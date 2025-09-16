@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 
-namespace Case2
+namespace Case3MessengerBackend
 {
 
     public class AppDbContext : DbContext
