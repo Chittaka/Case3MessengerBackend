@@ -1,3 +1,9 @@
+using Case3MessengerBackend;
+using AspNetCoreRateLimit;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Microsoft.EntityFrameworkCore;
 
 namespace Case3MessengerBackend
 {
@@ -6,30 +12,65 @@ namespace Case3MessengerBackend
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+            builder.Services.AddSignalR();
+            builder.Services.AddMemoryCache();
+            builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-            // Add services to the container.
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = builder.Configuration["Jwt:Issuer"],
+                    ValidAudience = builder.Configuration["Jwt:Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+                };
+            });
 
-            builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-            builder.Services.AddEndpointsApiExplorer();
+            builder.Services.Configure<IpRateLimitOptions>(options =>
+            {
+                        options.GeneralRules = new List<RateLimitRule>
+            {
+                new RateLimitRule
+                {
+                    Endpoint = "*",
+                    Limit = 1000,
+                    Period = "1m"
+                }
+            };
+            });
             builder.Services.AddSwaggerGen();
 
+            builder.Services.AddInMemoryRateLimiting();
+            builder.Services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
+            builder.Services.AddControllers();
             var app = builder.Build();
-
-            // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
+            app.UseIpRateLimiting();
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
+            app.UseRouting();
+            app.UseSwagger();
+            app.UseAuthentication();
+            app.UseAuthorization();
+            app.UseSwaggerUI();
+            app.UseEndpoints(endpoints =>
             {
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            }
+                endpoints.MapControllers();  // Подключаем все контроллеры
+                endpoints.MapHub<ChatHub>("/chat").RequireAuthorization();
+            });
 
             app.UseHttpsRedirection();
-
-            app.UseAuthorization();
-
-
-            app.MapControllers();
-
+            app.UseStatusCodePages();
+            app.UseExceptionHandler("/Error");
+            app.UseHsts(); // Включает HSTS для браузеров
             app.Run();
         }
     }
