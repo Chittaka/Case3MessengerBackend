@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.SignalR.Client;
-namespace Case2
+namespace Case3MessengerBackend
 {
     [Authorize]
     public class ChatHub : Hub
